@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Authentication Example</title>
+</head>
+
+<body>
+    <h2>Home</h2>
+    <button id="request" class="request">Make request</button>
+
+    <script>
+
+        const getCookie = () => {
+            const cookieArray = document.cookie.split(';');
+
+            const cookieObject = {};
+
+            cookieArray.forEach(cookie => {
+                const [name, value] = cookie.trim().split('=');
+                cookieObject[name] = value;
+            });
+
+            return cookieObject
+        }
+
+        const makeProtectedRequest = async () => {
+            try {
+                const response = await fetch('/protected', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': getCookie().token
+                    }
+                })
+
+                if (!response.ok) return
+                const data = await response.json()
+                const message = data.message
+
+                alert(message)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        document.getElementById('request').addEventListener('click', makeProtectedRequest);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Authentication Example</title>
+</head>
+
+<body>
+    <h2>Registration</h2>
+    <form id="registrationForm">
+        <input type="text" id="username" placeholder="Username"><br>
+        <input type="password" id="password" placeholder="Password"><br>
+        <button type="submit">Registration</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+
+        const doRegistration = async ({ username, password }) => {
+            try {
+                const response = await fetch('/registration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) return
+
+                document.getElementById('message').textContent = '';
+                alert('User has been successfully added!')
+                window.location = '/'
+            } catch (error) {
+                document.getElementById('message').textContent = 'Registration failed!';
+                console.error(error);
+            }
+        }
+
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const userData = { username, password }
+            doRegistration(userData)
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', handleSubmit);
+    </script>
+</body>
+
+</html>
